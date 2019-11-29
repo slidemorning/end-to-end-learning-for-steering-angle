@@ -2,7 +2,6 @@
 
 ### Data Set  
 comma.ai driving dataset
-https://github.com/commaai/research
 
 ### Reference
 
