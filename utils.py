@@ -47,39 +47,39 @@ def show_random_img(img_set):
         return rand_num
 
 def show_random_crop_img(img_set):
-	rand_num = random.randint(1, 10000)
-	print('image at {}'.format(rand_num))
-	img = img_set[rand_num]
-	img = img[50:140, :, :]
-	print(img.shape)
-	cv2.imshow('crop img', img)
-	if cv2.waitKey(0) == 27:
-		return rand_num
+    rand_num = random.randint(1, 10000)
+    print('image at {}'.format(rand_num))
+    img = img_set[rand_num]
+    img = img[50:140, :, :]
+    print(img.shape)
+    cv2.imshow('crop img', img)
+    if cv2.waitKey(0) == 27:
+        return rand_num
 
 def crop(img):
-	return img[50:140, :, :]
+    return img[50:140, :, :]
 
 def resize(img):
-	# resize to (width, height)
-	return cv2.resize(img, (200, 66), cv2.INTER_AREA)
+    # resize to (width, height)
+    return cv2.resize(img, (200, 66), cv2.INTER_AREA)
 
 def show(img):
-	cv2.imshow('img', img)
-	cv2.waitKey(0)
+    cv2.imshow('img', img)
+    cv2.waitKey(0)
 
 def preprocess(img):
-	print(img)
-	print(img.shape)
-	img = img[50:140, :, :]
-	print(img)
-	print(img.shape)
-	#img = cv2.resize(img, (IMAGE_WIDTH, IMAGE_HEIGHT), cv2.INTER_AREA)
-	return img
+    print(img)
+    print(img.shape)
+    img = img[50:140, :, :]
+    print(img)
+    print(img.shape)
+    #img = cv2.resize(img, (IMAGE_WIDTH, IMAGE_HEIGHT), cv2.INTER_AREA)
+    return img
 
 
 if __name__ == '__main__':
-	X, y = load_data()
-	img = X[1000]
-	img = crop(img)
-	img = resize(img)
-	show(img)
+    X, y = load_data()
+    #img = X[1000]
+    #img = crop(img)
+    img = resize(X)
+    #show(img)
