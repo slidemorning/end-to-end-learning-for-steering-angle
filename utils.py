@@ -18,8 +18,7 @@ X_PATH = './data/image/image.h5'
 Y_PATH = './data/label/label.h5' 
 TARGET_KEY_X = 'X'
 TARGET_KEY_Y = 'steering_angle'
-IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
-INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
+IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNEL = 200, 66, 3
 
 # internal
 def _down_sampling(data, hz_src, hz_dest):
@@ -78,23 +77,19 @@ def preprocess(img):
     return img
 
 def gen(X, y, batch_size=100):
+  images = np.empty([batch_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNEL])
+  angles = np.empty(batch_size)
+  while True:
+    i = 0
+    for index in np.random.permutation(len(X)):
+      images[i] = preprocess(X[index])
+      angles[i] = y[index]
+      i += 1
+      if i == batch_size:
+        break
+    yield images, angles
 
-    n_data = len(X)
-
-    while True:
-        for offset in range(0, n_data, batch_size):
-
-            X_batch = X[offset:offset+batch_size]
-            y_batch = y[offset:offset+batch_size]
-            images = []
-
-            for img in X_batch:
-                img = img[:, 50:140, 10:-10]
-                img = cv2.resize(img, (200, 66), cv2.INTER_AREA)
-                images.append(np.array(img))
-
-            X_ret = np.vstack(images)
-            yield sklearn.utils.shuffle(X_ret, y_batch, random_state=21)
+    
 
 
 if __name__ == '__main__':
