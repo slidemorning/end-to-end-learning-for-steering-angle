@@ -89,12 +89,21 @@ def gen(X, y, batch_size=100):
         break
     yield images, angles
 
-    
+def normalization(image):
+    return image/255.
 
+'''
+[[[[254 227 192]
+   [249 227 186]
+   [248 221 183]
+   
+   
+'''
 
 if __name__ == '__main__':
 
     X, y = load_data(X_PATH, Y_PATH)
-    generator = gen(X, y, 100)
-    for img, angle in generator:
-        print(img, angle)
+    import pandas as pd
+    df = pd.DataFrame(y)
+    print(df.describe())
+    print(y[4701])
