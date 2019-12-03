@@ -1,118 +1,68 @@
 import numpy as np
-import sklearn
 import random
 import h5py
-import cv2
+import pandas as pd
+import matplotlib.pyplot as plt
 
-'''
-Keras Conv2D parameter
-data_format = 'channel_last' correspond to input with shape (batch, height, widht, channels)
-            or 'channel_first' correspond to input with shape(batch, channels, height, widht)
-'''
-
-# img   : 52722  (20Hz)
-# label : 263583 (100Hz)
-X_PATH = './data/image/image.h5'
-Y_PATH = './data/label/label.h5'
-TARGET_KEY_X = 'X'
-TARGET_KEY_Y = 'steering_angle'
-IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNEL = 200, 66, 3
-
+X_PATH = './drive/My Drive/img_preprocessed_v1.h5'
+Y_PATH = './drive/My Drive/label.h5'
+X_KEY = 'X'
+Y_KEY = 'steering_angle'
+IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNEL = 200, 66, 1
 
 # internal
-def _down_sampling(data, hz_src, hz_dest):
-    ret = []
-    inc = hz_src // hz_dest
-    for i in range(inc * 10000, inc * 20000, inc):
-        ret.append(data[i])
-    return np.array(ret)
+def _down_sampling(data, fro, to):
+  ret = []
+  inc = fro//to
+  for i in range(inc*10000, inc*20000, inc):
+    ret.append(data[i])
+  return np.array(ret)
 
-
+# load dataset
 def load_data(x_path=X_PATH, y_path=Y_PATH):
-    h5_x = h5py.File(x_path, 'r')
-    h5_y = h5py.File(y_path, 'r')
-    X = h5_x[TARGET_KEY_X][10000:20000]
-    X = np.moveaxis(X, 1, -1)
-    y = h5_y[TARGET_KEY_Y]
-    y = _down_sampling(y, 100, 20)
-    return X, y
+  h5_x = h5py.File(x_path, 'r')
+  h5_y = h5py.File(y_path, 'r')
+  X = h5_x[X_KEY] # (10000, 66, 200, 1)
+  y = h5_y[Y_KEY] # (10000,)
+  y = _down_sampling(y, 100, 20)
+  return X, y
 
+# shuffle dataset
+def shuffle_data(X, y):
+  pair = [[a, b] for a, b in zip(X, y)]
+  random.shuffle(pair)
+  X_sh = [p[0] for p in pair]
+  y_sh = [p[1] for p in pair]
+  X_sh = np.array(X_sh)
+  y_sh = np.array(y_sh)
+  return X_sh, y_sh
 
-# for debug
-def show_random_img(img_set):
-    rand_num = random.randint(1, 10000)
-    print('image at {}'.format(rand_num))
-    print(img_set[rand_num].shape)
-    cv2.imshow('img', img_set[rand_num])
-    if cv2.waitKey(0) == 27:
-        return rand_num
+def plot_history(history):
+  hist = pd.DataFrame(history.history)
+  hist['epoch'] = history.epoch
 
+  plt.figure(figsize=(8, 12))
 
-def show_random_crop_img(img_set):
-    rand_num = random.randint(1, 10000)
-    print('image at {}'.format(rand_num))
-    img = img_set[rand_num]
-    img = img[50:140, :, :]
-    print(img.shape)
-    cv2.imshow('crop img', img)
-    if cv2.waitKey(0) == 27:
-        return rand_num
+  plt.subplot(2, 1, 1)
+  plt.xlabel('Epoch')
+  plt.ylabel('Mean Abs Error')
+  plt.plot(hist['epoch'], hist['mean_absolute_error'],
+           label='Train Error')
+  plt.plot(hist['epoch'], hist['val_mean_absolute_error'],
+           label='Val Error')
+  plt.ylim([0, 10])
+  plt.legend()
 
-
-def crop(img):
-    return img[50:140, :, :]
-
-
-def resize(img):
-    # resize to (width, height)
-    return cv2.resize(img, (200, 66), cv2.INTER_AREA)
-
-
-def show(img):
-    cv2.imshow('img', img)
-    cv2.waitKey(0)
-
-
-def preprocess(img):
-    print(img)
-    print(img.shape)
-    img = img[50:140, :, :]
-    print(img)
-    print(img.shape)
-    # img = cv2.resize(img, (IMAGE_WIDTH, IMAGE_HEIGHT), cv2.INTER_AREA)
-    return img
-
-
-def gen(X, y, batch_size=100):
-    images = np.empty([batch_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNEL])
-    angles = np.empty(batch_size)
-    while True:
-        i = 0
-        for index in np.random.permutation(len(X)):
-            images[i] = preprocess(X[index])
-            angles[i] = y[index]
-            i += 1
-            if i == batch_size:
-                break
-        yield images, angles
-
-
-def normalization(image):
-    return image / 255.
-
-
-'''
-[[[[254 227 192]
-   [249 227 186]
-   [248 221 183]
-
-
-'''
+  plt.subplot(2, 1, 2)
+  plt.xlabel('Epoch')
+  plt.ylabel('Mean Square Error')
+  plt.plot(hist['epoch'], hist['mean_squared_error'],
+           label='Train Error')
+  plt.plot(hist['epoch'], hist['val_mean_squared_error'],
+           label='Val Error')
+  plt.ylim([0, 100])
+  plt.legend()
+  plt.show()
 
 if __name__ == '__main__':
-    X, y = load_data(X_PATH, Y_PATH)
-    import pandas as pd
-
-    df = pd.DataFrame(y)
-    print(df.describe())
-    print(y[4701])
+    pass
