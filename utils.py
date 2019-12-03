@@ -11,7 +11,7 @@ Y_KEY = 'steering_angle'
 IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNEL = 200, 66, 1
 
 # internal
-def _down_sampling(data, fro, to):
+def __down_sampling__(data, fro, to):
   ret = []
   inc = fro//to
   for i in range(inc*10000, inc*20000, inc):
@@ -24,7 +24,7 @@ def load_data(x_path=X_PATH, y_path=Y_PATH):
   h5_y = h5py.File(y_path, 'r')
   X = h5_x[X_KEY] # (10000, 66, 200, 1)
   y = h5_y[Y_KEY] # (10000,)
-  y = _down_sampling(y, 100, 20)
+  y = __down_sampling__(y, 100, 20)
   return X, y
 
 # shuffle dataset
