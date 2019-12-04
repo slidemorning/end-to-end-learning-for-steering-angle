@@ -10,7 +10,7 @@ comma.ai driving dataset
 
 -Python  
 -Keras  
--Google Colab (Runtime : GPU)
+-Google Colab
 
 <hr>
 
