@@ -8,20 +8,23 @@ X_PATH = './data/image/img_preprocessed_v1.h5'
 Y_PATH = './data/label/label.h5'
 MODEL_SAVE_FOLDER_PATH = './steer-model/'
 
-# hyperparameter of steer model
+# hyper-parameter
 EPOCHS = 100
 BATCH_SIZE = 64
 
 if __name__ == '__main__':
 
+    print('load dataset')
     X, y = utils.load_data(X_PATH, Y_PATH)
 
+    print('shuffle dataset')
     X, y = utils.shuffle_data(X, y)
 
+    print('split dataset')
     X_train, X_valid, X_test = X[:7000], X[7000:9000], X[9000:]
-
     y_train, y_valid, y_test = y[:7000], y[7000:9000], y[9000:]
 
+    print('get steer model')
     steer_model = model.get_model()
     steer_model.summary()
 
@@ -43,5 +46,8 @@ if __name__ == '__main__':
 
     utils.plot_history(history)
 
-    #steer_model.save(MODEL_SAVE_PATH+MODEL_SAVE_NAME)
+    print('evaluation loss and metrics')
+    loss_and_metrics = model.evaluate(X_test, y_test, batch_size=32)
+    print(loss_and_metrics)
+
 
