@@ -1,14 +1,15 @@
 import argparse
 
-def main():
+def get_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--input_dir', type=str)
 	parser.add_argument('--output_dir', type=str)
 	args = parser.parse_args()
-	input_dir = args.input_dir
-	output_dir = args.output_dir
-	print('input_dir : ', input_dir)
-	print('output_dir : ', output_dir)
+	return args
 
 if __name__ == '__main__':
-	main()
+
+	args = get_args()
+
+	print(args.input_dir)
+	print(args.output_dir)
