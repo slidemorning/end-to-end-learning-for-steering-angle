@@ -10,4 +10,4 @@ comma.ai driving dataset
 
 ### Preprocess
 
-    -v1 : crop(160x320 to 90x300)->resize(90x300 to 66x200)->rgb2gray(3ch to 1ch)
+    v1 : crop(160x320 to 90x300) -> resize(90x300 to 66x200) -> rgb2gray(3ch to 1ch)
