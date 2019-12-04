@@ -39,7 +39,7 @@ def save_preprocessed_data(r_path, s_path, s_name):
 if __name__ == '__main__':
 
     save_file_name = 'image_preprocessed.h5'
-    #save_preprocessed_data(READ_PATH, SAVE_PATH, save_file_name)
+    save_preprocessed_data(READ_PATH, SAVE_PATH, save_file_name)
     #X = load_origin_data(READ_PATH)
 
     # h5_origin = h5py.File(READ_PATH, 'r')

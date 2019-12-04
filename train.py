@@ -4,7 +4,7 @@ import os
 from keras.callbacks import ModelCheckpoint
 
 # global var
-X_PATH = './data/image/img_preprocessed_v1.h5'
+X_PATH = './data/image/image_preprocessed.h5'
 Y_PATH = './data/label/label.h5'
 MODEL_SAVE_FOLDER_PATH = './steer-model/'
 
