@@ -4,8 +4,8 @@ import h5py
 import pandas as pd
 import matplotlib.pyplot as plt
 
-X_PATH = './drive/My Drive/img_preprocessed_v1.h5'
-Y_PATH = './drive/My Drive/label.h5'
+X_PATH = './data/image/img_preprocessed_v1.h5'
+Y_PATH = './data/label/label.h5'
 X_KEY = 'X'
 Y_KEY = 'steering_angle'
 IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNEL = 200, 66, 1
