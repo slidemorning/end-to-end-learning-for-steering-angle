@@ -4,14 +4,16 @@ import cv2
 
 READ_PATH = './data/image/image.h5'
 SAVE_PATH = './data/image/'
+DATA_FROM, DATA_TO = 4000, 33000
 IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNEL = 200, 66, 1
 KEY = 'X'
 
-def __load_origin_data__(path=READ_PATH):
+def __load_origin_data__(path=READ_PATH, fro=DATA_FROM, to=DATA_TO):
     h5 = h5py.File(path, 'r')
     X = h5['X']
-    X = X[10000:20000]
+    X = X[DATA_FROM:DATA_TO]
     return X
+
 
 def __preprocess__(data, hwc=(IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNEL)):
     ret = np.empty([len(data), hwc[0], hwc[1], hwc[2]])
@@ -29,17 +31,26 @@ def __preprocess__(data, hwc=(IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNEL)):
         ret[index] = img
     return ret
 
+def __show__(image):
+    image = np.moveaxis(image, 0, -1)
+    cv2.imshow('img', image)
+    cv2.waitKey(0)
+
 def save_preprocessed_data(r_path, s_path, s_name):
     h5 = h5py.File(s_path+s_name, 'w')
-    X = __load_origin_data__(r_path)
+    X = __load_origin_data__(r_path, DATA_FROM, DATA_TO)
     X = __preprocess__(X, (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNEL))
     h5.create_dataset(KEY, data=X)
     h5.close()
 
+
+
 if __name__ == '__main__':
 
-    save_file_name = 'image_preprocessed.h5'
+    save_file_name = 'image_preprocessed_v1_23m.h5'
     save_preprocessed_data(READ_PATH, SAVE_PATH, save_file_name)
+    # save_file_name = 'image_preprocessed.h5'
+    # save_preprocessed_data(READ_PATH, SAVE_PATH, save_file_name)
     #X = load_origin_data(READ_PATH)
 
     # h5_origin = h5py.File(READ_PATH, 'r')
