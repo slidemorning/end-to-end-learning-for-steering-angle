@@ -1,26 +1,34 @@
+---
+marp: true
+---
+
 # end-to-end-learning-for-steering-angle
 
-### Dataset  
+## Dataset  
 
-comma.ai driving dataset  
+* comma.ai driving dataset
 
-<hr>
+## Environment
 
-### Environment
+* Python 3
+* Keras
+* Google Colab
+---
 
--Python  
--Keras  
--Google Colab
+## Preprocess
 
-<hr>
-
-### Process
-##### Preprocess
-
+```python3
     v1 : crop(160x320 to 90x300) -> resize(90x300 to 66x200) -> rgb2gray(3ch to 1ch)
+```
 
-<hr>
+---
+## Network
+![Network](./network.png)
 
+---
+## Result
+
+---
 ### Reference
 
 [1] https://github.com/commaai/research  
