@@ -1,7 +1,3 @@
----
-marp: true
----
-
 # end-to-end-learning-for-steering-angle
 
 ## Dataset  
